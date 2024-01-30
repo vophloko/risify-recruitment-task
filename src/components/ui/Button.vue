@@ -64,9 +64,11 @@ export default {
       @click="navigate"
       :href="href"
     >
+      <slot name="prepend" />
       <div>
         <slot />
       </div>
+      <slot name="append" />
     </a>
   </router-link>
   <component
@@ -76,9 +78,11 @@ export default {
     :is="as"
     :class="[buttonVariants({ variant, size, color }), { '--block': block }, $attrs.class]"
   >
+    <slot name="prepend" />
     <div>
       <slot />
     </div>
+    <slot name="append" />
   </component>
 </template>
 
@@ -100,7 +104,9 @@ export default {
   display: inline-flex;
   text-align: center;
   justify-content: center;
+  align-items: center;
   vertical-align: middle;
+  gap: 0.5rem;
 }
 
 .button div {
@@ -108,14 +114,6 @@ export default {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
-  text-align: center;
-}
-
-.button div:has(img, svg) {
-  display: inline-flex;
-  gap: 0.5rem;
-  align-items: center;
-  justify-content: center;
 }
 
 .button:disabled {

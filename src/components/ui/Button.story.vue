@@ -52,29 +52,38 @@ function setupApp({ app }: { app: any }) {
     </Variant>
     <Variant title="With an icon">
       <div>
-        <Button
-          ><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-            <path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z" />
-          </svg>
+        <Button>
+          <template #prepend>
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z" />
+            </svg>
+          </template>
+
           Button with Prepended Icon
         </Button>
         <Button
           >Button with Appended Icon
-          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-            <path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z" />
-          </svg>
+          <template #append>
+            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z" />
+            </svg>
+          </template>
         </Button>
       </div>
     </Variant>
     <Variant title="With an image">
       <div>
-        <Button
-          ><img src="https://images.dog.ceo/breeds/mountain-swiss/n02107574_2383.jpg" alt="Dog" />
+        <Button>
+          <template #prepend>
+            <img src="https://images.dog.ceo/breeds/mountain-swiss/n02107574_2383.jpg" alt="Dog" />
+          </template>
           Button with Prepended Image
         </Button>
         <Button
           >Button with Appended Image
-          <img src="https://images.dog.ceo/breeds/mountain-swiss/n02107574_2383.jpg" alt="Dog" />
+          <template #append>
+            <img src="https://images.dog.ceo/breeds/mountain-swiss/n02107574_2383.jpg" alt="Dog" />
+          </template>
         </Button>
       </div>
     </Variant>
