@@ -46,15 +46,13 @@ function setupApp({ app }: { app: any }) {
       >
     </Variant>
     <Variant title="Disabled">
-      <Button>Focusable Button</Button>
+      <Button disabled @click="logEvent('click', $event)">Disabled Button</Button>
       <Button href="https:/google.com" disabled as="a" @click="logEvent('click', $event)"
-        >Disabled Button</Button
+        >Disabled Anchor Button</Button
       >
       <Button to="/unknown-route" disabled as="router-link" @click="logEvent('click', $event)"
-        >Disabled Button</Button
+        >Disabled RouterLink Button</Button
       >
-      <Button disabled @click="logEvent('click', $event)">Disabled Button</Button>
-      <Button>Focusable Button</Button>
     </Variant>
     <Variant title="With an icon">
       <div>
