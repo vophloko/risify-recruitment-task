@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { cva } from 'class-variance-authority'
+import { onMounted, ref } from 'vue'
 import { RouterLink, type RouteLocationRaw } from 'vue-router'
-import { computed } from 'vue'
 
 const buttonVariants = cva('button', {
   variants: {
@@ -32,27 +32,25 @@ interface Props {
   color?: NonNullable<Parameters<typeof buttonVariants>[0]>['color']
   as?: 'button' | 'router-link' | 'a'
   block?: boolean
+  disabled?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   as: 'button'
 })
 
-const isRouterLink = computed(() => {
-  return props.as === 'router-link'
+const anchor = ref<HTMLAnchorElement | null>(null)
+onMounted(() => {
+  if (props.disabled && props.as === 'a') {
+    anchor.value?.removeAttribute('href')
+  }
 })
-</script>
-
-<script lang="ts">
-export default {
-  inheritAttrs: false
-}
 </script>
 
 <template>
   <router-link
-    v-if="isRouterLink"
-    :tabindex="$attrs.disabled && 0"
+    v-if="as === 'router-link' && !disabled"
+    :tabindex="disabled && 0"
     :to="$attrs.to as RouteLocationRaw"
     custom
     v-bind="$props"
@@ -60,30 +58,55 @@ export default {
   >
     <a
       v-bind="$attrs"
-      :class="[buttonVariants({ variant, size, color }), { '--block': block }, $attrs.class]"
+      :class="[
+        buttonVariants({ variant, size, color }),
+        { '--block': block },
+        { '--disabled': disabled },
+        $attrs.class
+      ]"
       @click="navigate"
+      :disabled="disabled"
       :href="href"
     >
       <slot name="prepend" />
-      <div>
+      <span>
         <slot />
-      </div>
+      </span>
       <slot name="append" />
     </a>
   </router-link>
-  <component
-    v-else
+  <a
     v-bind="$attrs"
-    :tabindex="$attrs.disabled && 0"
-    :is="as"
-    :class="[buttonVariants({ variant, size, color }), { '--block': block }, $attrs.class]"
+    v-else-if="as === 'a'"
+    ref="anchor"
+    :class="[
+      buttonVariants({ variant, size, color }),
+      { '--block': block },
+      { '--disabled': disabled },
+      $attrs.class
+    ]"
   >
     <slot name="prepend" />
-    <div>
+    <span>
       <slot />
-    </div>
+    </span>
     <slot name="append" />
-  </component>
+  </a>
+  <button
+    v-else
+    :class="[
+      buttonVariants({ variant, size, color }),
+      { '--block': block },
+      { '--disabled': disabled },
+      $attrs.class
+    ]"
+  >
+    <slot name="prepend" />
+    <span>
+      <slot />
+    </span>
+    <slot name="append" />
+  </button>
 </template>
 
 <style scoped>
@@ -109,14 +132,15 @@ export default {
   gap: 0.5rem;
 }
 
-.button div {
+.button span {
+  /* ensure single line of text node */
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
 }
 
-.button:disabled {
+.--disabled {
   cursor: not-allowed;
   opacity: 0.4;
 }
@@ -124,8 +148,9 @@ export default {
 .--variant-filled {
   background: var(--color-0);
 }
-.--variant-filled:not([disabled]):focus,
-.--variant-filled:not([disabled]):hover {
+
+.--variant-filled:not(.--disabled):focus,
+.--variant-filled:not(.--disabled):hover {
   background: var(--color-1);
 }
 
@@ -133,8 +158,8 @@ export default {
   border: 1px solid var(--color-text);
   background: white;
 }
-.--variant-outlined:not([disabled]):focus,
-.--variant-outlined:not([disabled]):hover {
+.--variant-outlined:not(.--disabled):focus,
+.--variant-outlined:not(.--disabled):hover {
   background: var(--color-1);
 }
 
