@@ -76,7 +76,6 @@ onMounted(() => {
     </a>
   </router-link>
   <a
-    v-bind="$attrs"
     v-else-if="as === 'a'"
     ref="anchor"
     :class="[
