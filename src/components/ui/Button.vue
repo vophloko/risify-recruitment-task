@@ -50,7 +50,6 @@ onMounted(() => {
 <template>
   <router-link
     v-if="as === 'router-link' && !disabled"
-    :tabindex="disabled && 0"
     :to="$attrs.to as RouteLocationRaw"
     custom
     v-bind="$props"
